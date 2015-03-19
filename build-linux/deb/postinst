@@ -52,6 +52,12 @@ if [ "$1" = "configure" ]; then
     # Register daemon
     update-rc.d -f pdagent defaults
 
+    # systemd support
+    if [ -d /run/systemd/system ]; then
+        systemctl --system daemon-reload >/dev/null || true
+        deb-systemd-invoke start acpid.path >/dev/null || true
+    fi
+
     # Restart daemon
     service pdagent restart
 fi
